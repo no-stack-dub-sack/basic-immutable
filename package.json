@@ -1,0 +1,18 @@
+{
+  "name": "easy-immutable",
+  "version": "1.0.0",
+  "description": "easy immutable objects in js, with small api surface area",
+  "main": "index.js",
+  "author": "pweinberg",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "lodash": "^4.17.5"
+  },
+  "devDependencies": {
+    "jest": "^22.4.3"
+  }
+}
