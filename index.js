@@ -2,9 +2,16 @@ const ImmutableArray = require('./lib/ImmutableArray');
 const ImmutableObject = require('./lib/ImmutableObject');
 
 
-
-// NOTE: NEEDS MORE IN DEPTH TESTING OF toJS METHOD, CONVERTING DEEPLY NESTED OBJECTS WITH METHODS
-
+/* TODO:
+    * NEEDS MORE IN DEPTH TESTING OF toJS METHOD, CONVERTING DEEPLY NESTED OBJECTS WITH METHODS
+    * Finish declaration file
+    * Create docs
+    * publish to NPM to test out declaration files
+    *
+    * SEAMLESS-IMMUTABLE PR! Needs default value type for this line:
+    *   https://github.com/DefinitelyTyped/DefinitelyTyped/blob/
+    *   b3c41ab6997d3b016d9567381e51a3fea8534e9e/types/seamless-immutable/index.d.ts#L46
+*/
 
 
 /*_________.                     .___                        __        ___.    __                  ____.

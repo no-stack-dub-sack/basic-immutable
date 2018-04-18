@@ -5,7 +5,7 @@ describe("EasyImmutable 'toJS' method", function () {
     it("has 'hidden' non-enumerable props before toJS()", function () {
         const OG = Immutable({ a: 1, b: 2 });
         const keysBefore = Object.getOwnPropertyNames(OG);
-        expect(keysBefore.length).toBe(9);
+        expect(keysBefore.length).toBe(11);
         expect(OG).toEqual({ a: 1, b: 2 });
     });
 

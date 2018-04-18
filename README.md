@@ -1,7 +1,7 @@
 # easy-immutable
 
 ### About
-A light-weight, single-dependency, TypeScript compatible, immutability library for JavaScript for immutably creating backwards compatible objects and arrays, with a few extra features, just for fun. Under the hood, this library is really just an immutable extension of lodash; thrown together quickly and easily; nothing too fancy here :smile:
+An unsophisticated, light-weight, TypeScript compatible immutability library for creating backwards JavaScript compatible objects and arrays, with a few extra features, just for fun. Under the hood, this library is really just an immutable extension of lodash; thrown together quickly and easily; nothing too fancy here :smile:
 
 Pass your data structure to `Immutable()` and call `toJS()` to transform them back into POJO (plain-old JavaScript objects). Full list of methods below.
 

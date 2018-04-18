@@ -9,10 +9,19 @@ describe("EasyImmutable 'merge' method", function () {
         expect(OG).toEqual({ a: 1, b: 2 });
     });
 
+    it("immutably merges from multiple sources", function () {
+        const OG = Immutable({ a: 1, b: 2 });
+        const next = OG.merge({ a: 2 }, { b: 3 });
+        expect(next).toEqual({ a: 2, b: 3 });
+        expect(OG).toEqual({ a: 1, b: 2 });
+    });
+
     it("only merges own props", function () {
         const OG = Immutable({ a: 1 });
-        const throws = () => OG.merge({ b: 'c' });
-        expect(throws).toThrow();
+        const throwsA = () => OG.merge({ b: 'c' });
+        const throwsB = () => OG.merge({ a: 'c' }, { c: 'd'});
+        expect(throwsA).toThrow();
+        expect(throwsB).toThrow();
     });
 
     it("is chainable", function () {
