@@ -250,7 +250,7 @@ declare namespace EasyImmutable {
             */
         mergeTollerant(...sources: any[]): ImmutableObject<T & any>;
         /**
-            * Converts to nutable ImmutableObject, i.e. Immutable methods are still available,
+            * Converts to mutable ImmutableObject, i.e. Immutable methods are still available,
             * but mutations are allowed until another ImmutableObject method is called
             * @return Returns new ImmutableObject
             */
@@ -268,9 +268,24 @@ declare namespace EasyImmutable {
         equals(comparison: any): boolean;
         /**
             * Returns a new ImmutableArray containing the values of the object's keys
+            *
+            * NOTE: If using TypeScript, and no type argument is explicitly passed to
+            * the toArray generic, this method will essentially rerturn a tuple, which
+            * is strictly typed to allow only the values found in your array. For a less
+            * strictly typed array, pass a type argument, e.g. toArray<string | number>()
             * @return Returns new ImmutableArray
             */
         toArray<K extends keyof T>(): ImmutableArray<T[K]>;
+        /**
+            * Returns a new ImmutableArray containing the values of the object's keys
+            *
+            * NOTE: If using TypeScript, and no type argument is explicitly passed to
+            * the toArray generic, this method will essentially rerturn a tuple, which
+            * is strictly typed to allow only the values found in your array. For a less
+            * strictly typed array, pass a type argument, e.g. toArray<string | number>()
+            * @return Returns new ImmutableArray
+            */
+        toArray<TTypes>(): ImmutableArray<TTypes>;
     }
 
     interface IArray<T> {
@@ -444,7 +459,7 @@ declare namespace EasyImmutable {
             *
             * NOTE: that in TypeScript, unless you pass an explicit type to the toObject generic, this method does cause your object to
             * lose some type-safety as the resulting type will not be as strict as it would be if you created an ImmutableObject directly.
-            * Providing a type parameter is highly recommended.
+            * Providing a type argument is highly recommended.
             * @param keyInitializer A single-letter string ([a-zA-Z]), number, or function synonymous with an Array.map callback.
             * If provided a letter or number, keys will begin with that letter or number and be incremented for each element of
             * the array. To designate custom keys, such as symbols based on the array's elements, proivde an Array.map callback instead.
@@ -458,7 +473,7 @@ declare namespace EasyImmutable {
             *
             * NOTE: that in TypeScript, unless you pass an explicit type to the toObject generic, this method does cause your object to
             * lose some type-safety as the resulting type will not be as strict as it would be if you created an ImmutableObject directly.
-            * Providing a type parameter is highly recommended.
+            * Providing a type argument is highly recommended.
             * @param keyInitializer A single-letter string ([a-zA-Z]), number, or function synonymous with an Array.map callback.
             * If provided a letter or number, keys will begin with that letter or number and be incremented for each element of
             * the array. To designate custom keys, such as symbols based on the array's elements, proivde an Array.map callback instead.
@@ -472,7 +487,7 @@ declare namespace EasyImmutable {
             *
             * NOTE: that in TypeScript, unless you pass an explicit type to the toObject generic, this method does cause your object to
             * lose some type-safety as the resulting type will not be as strict as it would be if you created an ImmutableObject directly.
-            * Providing a type parameter is highly recommended.
+            * Providing a type argument is highly recommended.
             * @param keyInitializer A single-letter string ([a-zA-Z]), number, or function synonymous with an Array.map callback.
             * If provided a letter or number, keys will begin with that letter or number and be incremented for each element of
             * the array. To designate custom keys, such as symbols based on the array's elements, proivde an Array.map callback instead.
@@ -486,7 +501,7 @@ declare namespace EasyImmutable {
             *
             * NOTE: that in TypeScript, unless you pass an explicit type to the toObject generic, this method does cause your object to
             * lose some type-safety as the resulting type will not be as strict as it would be if you created an ImmutableObject directly.
-            * Providing a type parameter is highly recommended.
+            * Providing a type argument is highly recommended.
             * @param keyInitializer A single-letter string ([a-zA-Z]), number, or function synonymous with an Array.map callback.
             * If provided a letter or number, keys will begin with that letter or number and be incremented for each element of
             * the array. To designate custom keys, such as symbols based on the array's elements, proivde an Array.map callback instead.
@@ -500,7 +515,7 @@ declare namespace EasyImmutable {
             *
             * NOTE: that in TypeScript, unless you pass an explicit type to the toObject generic, this method does cause your object to
             * lose some type-safety as the resulting type will not be as strict as it would be if you created an ImmutableObject directly.
-            * Providing a type parameter is highly recommended.
+            * Providing a type argument is highly recommended.
             * @param keyInitializer A single-letter string ([a-zA-Z]), number, or function synonymous with an Array.map callback.
             * If provided a letter or number, keys will begin with that letter or number and be incremented for each element of
             * the array. To designate custom keys, such as symbols based on the array's elements, proivde an Array.map callback instead.
@@ -514,7 +529,7 @@ declare namespace EasyImmutable {
             *
             * NOTE: that in TypeScript, unless you pass an explicit type to the toObject generic, this method does cause your object to
             * lose some type-safety as the resulting type will not be as strict as it would be if you created an ImmutableObject directly.
-            * Providing a type parameter is highly recommended.
+            * Providing a type argument is highly recommended.
             * @param keyInitializer A single-letter string ([a-zA-Z]), number, or function synonymous with an Array.map callback.
             * If provided a letter or number, keys will begin with that letter or number and be incremented for each element of
             * the array. To designate custom keys, such as symbols based on the array's elements, proivde an Array.map callback instead.
@@ -528,7 +543,7 @@ declare namespace EasyImmutable {
             *
             * NOTE: that in TypeScript, unless you pass an explicit type to the toObject generic, this method does cause your object to
             * lose some type-safety as the resulting type will not be as strict as it would be if you created an ImmutableObject directly.
-            * Providing a type parameter is highly recommended.
+            * Providing a type argument is highly recommended.
             * @param keyInitializer A single-letter string ([a-zA-Z]), number, or function synonymous with an Array.map callback.
             * If provided a letter or number, keys will begin with that letter or number and be incremented for each element of
             * the array. To designate custom keys, such as symbols based on the array's elements, proivde an Array.map callback instead.
@@ -542,7 +557,7 @@ declare namespace EasyImmutable {
             *
             * NOTE: that in TypeScript, unless you pass an explicit type to the toObject generic, this method does cause your object to
             * lose some type-safety as the resulting type will not be as strict as it would be if you created an ImmutableObject directly.
-            * Providing a type parameter is highly recommended.
+            * Providing a type argument is highly recommended.
             * @param keyInitializer A single-letter string ([a-zA-Z]), number, or function synonymous with an Array.map callback.
             * If provided a letter or number, keys will begin with that letter or number and be incremented for each element of
             * the array. To designate custom keys, such as symbols based on the array's elements, proivde an Array.map callback instead.
@@ -551,7 +566,7 @@ declare namespace EasyImmutable {
             */
         toObject<IObjectType>(keyInitializer: MapCallback<T>): ImmutableObject<IObjectType>;
         /**
-            * Converts to nutable ImmutableArray, i.e. Immutable methods are still available,
+            * Converts to mutable ImmutableArray, i.e. Immutable methods are still available,
             * but mutations are allowed until another ImmutableArray method is called
             * @return Returns new ImmutableArray
             */
