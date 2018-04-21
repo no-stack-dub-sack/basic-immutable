@@ -20,7 +20,28 @@ However, that this library is so tailored to my needs, means that it might not b
 
 # API
 
-## get [object, array]
+__An important note about `BasicImmutable` arrays:__ 
+- Arrays created with `Immutable()` are still just JavaScript arrays under the hood, which means that all of the native array methods are still available to you, and all non-mutator methods behave as normal (`filter`, `map`, `reduce`, `includes`, `indexOf`, etc.). However, all [mutator methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/prototype#Mutator_methods) have been re-implemented as immutable.
+- For example, `Immutable([1, 2, 3]).push(1)`, rather than returning the array's length after performing the push operation, will instead return a new `BasicImmutable` array (the original array is, of course, unmutated).
+
+A full list of the re-implemented non-mutator methods is below, __which all return new BasicImmutable arrays__:
+
+| Method     | Description                                                                                        |
+|------------|----------------------------------------------------------------------------------------------------|
+| push       | Returns a new `BasicImmutable` array with one or more elements added to the end                    |
+| pop        | Returns a new `BasicImmutable` array with the last element removed                                 |
+| shift      | Returns a new `BasicImmutable` array with the first element removed                                |
+| unshift    | Returns a new `BasicImmutable` array with one or more elements added to the front                  |
+| splice     | Returns a new `BasicImmutable` array with elements added and/or removed                            |
+| sort       | Returns a new `BasicImmutable` array with the elements sorted                                      |
+| reverse    | Returns a new `BasicImmutable` array with the order of the elements reversed                       |
+| copyWithin | Returns a new `BasicImmutable` array with a sequence of array elements copied within the array     |
+| fill       | Returns a new `BasicImmutable` array filled from a start index to an end index with a static value |
+
+The remainder of the documentation follows the convention: __methodName [available on]__, e.g. `get` is available and can be called on both ImmutableObjects and ImmutableArrays.
+
+## get &nbsp; _[object, array]_
+
 Gets the value at a given path, and returns it. _Uses Lodash's `_.get()`._
 
 __Parameters:__
@@ -38,7 +59,7 @@ arr.get('2.a'); // 1
 ```
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/GetExample)
 
-## set [object, array]
+## set &nbsp; _[object, array]_
 Sets value at a given path, and returns a new BasicImmutable object or array. _Uses Lodash's `_.set()`._
 
 __Parameters:__
@@ -57,7 +78,7 @@ const arr2 = arr1.set('2.a', 10);
 ```
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/SetExample)
 
-## update [object, array]
+## update <span style="font-size: 16px; font-style: italic;x">&nbsp;&nbsp;Available on [ Immutableobject | ImmutableArray ]</span>
 Like `set` except accepts an updater function to produce the value to set. _Uses Lodash's `_.update()`._
 
 __Parameters:__
@@ -179,11 +200,11 @@ With TypeScript:
 ```ts
 const obj = Immutable<{ a: 'yes'; b: 'no' }>({ a: 'yes', b: 'no'});
 
-const good = obj.mergeTollerant({ c: 'maybe' })
+const good = obj.mergeTollerant({ c: 'maybe' });
 // is inferred type { a: "yes"; b: "no"; } & { c: string; }
 
 interface IMaybe { c: 'maybe'; }
-const better = obj.mergeTollerant<IMaybe>({ c: 'maybe' })
+const better = obj.mergeTollerant<IMaybe>({ c: 'maybe' });
 // is safer type { a: "yes"; b: "no"; } & { c: "maybe"; }
 ```
 With JavaScript:
@@ -195,3 +216,39 @@ const obj1 = obj.merge({ c: 3 });
 ```
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/MergeTollerantExample)
 
+## toArray [object]
+Returns a new BasicImmutable array containing the values of the object's keys.
+
+__TIP:__ If using TypeScript, and your object has been explicitly typed, e.g. `Immutable<{ a: 1, b: 2 }>({a: 1, b: 2});`, and no type argument is explicitly passed to the `toArray` generic, this method will essentially rerturn a tuple, which is strictly typed to allow only the values found in your object. For a less strictly typed array, pass a type argument, e.g. `toArray<number>();`, this way you will be able to add additional data with the type `number` to your array.
+
+__Parameters:__ None
+
+With TypeScript:
+```ts
+const obj = Immutable({ a: 1, b: 2 })
+const obj1 = Immutable<{ a: 1, b: 2 }>({a: 1, b: 2})
+
+const arr = obj1.toArray()
+// inferred type: ImmutableArray<1, 2>, i.e. [1, 2]
+
+const arr1 = obj1.toArray<number>()
+// type: ImmutableArray<number>, i.e. number[]
+
+const arr2 = obj.toArray() // inferred type: number[]
+// because obj1's type was inferred, not explicitly defined
+```
+With JavaScript:
+```js
+const obj = Immutable({ a: 1, b: 2, c: 3 });
+
+const arr = obj.toArray(); // [1, 2, 3]
+```
+:point_up: [Run](https://repl.it/@no_stack_dub_sack/ToArrayExample)
+
+## delete 
+Returns a new `ImmutableArray` with an element the element at a given position removed; shorthand for `Array.splice(index, 1)`.
+
+(!!!! UPDATE DELETE TYPINGS!!!)
+
+## pull
+## toObject

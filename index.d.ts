@@ -3,6 +3,11 @@ declare namespace EasyImmutable {
     export interface IObject<T> {
         /**
             * Sets value at a given path, and returns a new ImmutableObject
+            *
+            * __Note:__ If the set operation changes the base type of your object, you
+            * can pass in a new type to the `set` genertic to keep your object type safe;
+            * e.g. `obj.set<TResult>(path, {...}): ImmutableObject<TResult>`
+            *
             * @param path The path of the property to set
             * @param value Value to set at the given path
             * @return Returns new ImmutableArray
@@ -10,47 +15,40 @@ declare namespace EasyImmutable {
         set<TValue>(path: string, value: TValue): ImmutableObject<T>;
         /**
             * Sets value at a given path, and returns a new ImmutableObject
+            *
+            * __Note:__ If the set operation changes the base type of your object, you
+            * can pass in a new type to the `set` genertic to keep your object type safe;
+            * e.g. `obj.set<TResult>(path, {...}): ImmutableObject<TResult>`
+            *
             * @param path The path of the property to set
             * @param value Value to set at the given path
             * @return Returns new ImmutableArray
             */
-        set<K extends keyof T>(path: [K], value: T[K]): ImmutableObject<T>;
+        set<TResult>(path: string, value: any): ImmutableObject<TResult>;
         /**
             * Sets value at a given path, and returns a new ImmutableObject
+            *
+            * __Note:__ If the set operation changes the base type of your object, you
+            * can pass in a new type to the `set` genertic to keep your object type safe;
+            * e.g. `obj.set<TResult>(path, {...}): ImmutableObject<TResult>`
+            *
             * @param path The path of the property to set
             * @param value Value to set at the given path
             * @return Returns new ImmutableArray
             */
-        set<K extends keyof T, L extends keyof T[K]>(path: [K, L], value: T[K][L]): ImmutableObject<T>;
-        /**
+        set<TValue>(path: PropertyName[], value: TValue): ImmutableObject<T>;
+         /**
             * Sets value at a given path, and returns a new ImmutableObject
+            *
+            * __Note:__ If the set operation changes the base type of your object, you
+            * can pass in a new type to the `set` genertic to keep your object type safe;
+            * e.g. `obj.set<TResult>(path, {...}): ImmutableObject<TResult>`
+            *
             * @param path The path of the property to set
             * @param value Value to set at the given path
             * @return Returns new ImmutableArray
             */
-        set<K extends keyof T, L extends keyof T[K], M extends keyof T[K][L]>(path: [K, L, M], value: T[K][L][M]): ImmutableObject<T>;
-        /**
-            * Sets value at a given path, and returns a new ImmutableObject
-            * @param path The path of the property to set
-            * @param value Value to set at the given path
-            * @return Returns new ImmutableArray
-            */
-        set<K extends keyof T, L extends keyof T[K], M extends keyof T[K][L], N extends keyof T[K][L][M]>(path: [K, L, M, N], value: T[K][L][M][N]): ImmutableObject<T>;
-        /**
-            * Sets value at a given path, and returns a new ImmutableObject
-            * @param path The path of the property to set
-            * @param value Value to set at the given path
-            * @return Returns new ImmutableArray
-            */
-        set<K extends keyof T, L extends keyof T[K], M extends keyof T[K][L], N extends keyof T[K][L][M], O extends keyof T[K][L][M][N]>(path: [K, L, M, N, O], value: T[K][L][M][N][O]): ImmutableObject<T>;
-        /**
-            * Sets value at a given path, and returns a new ImmutableObject
-            * @param path The path of the property to set
-            * @param value Value to set at the given path
-            * @return Returns new ImmutableArray
-            */
-        set<TValue>(path: string[], value: TValue): ImmutableObject<T>;
-
+        set<TResult>(path: PropertyName[], value: any): ImmutableObject<TResult>;
         /**
             * Gets the property value at path of object. If the resolved value is undefined the defaultValue is used in its place
             * @param path The path of the property to get
@@ -206,6 +204,13 @@ declare namespace EasyImmutable {
             */
         update<TValue>(path: string[], updaterFunc: (value: TValue) => any): ImmutableObject<T>;
         /**
+            * Like set except accepts an updater function to produce the value to set
+            * @param path The path of the element to set
+            * @param updater The function to produce the updated value
+            * @return Returns new ImmutableObject
+            */
+        update<TValue>(path: string, updaterFunc: (value: TValue) => any): ImmutableObject<T>;
+        /**
             * Recursively merges own and inherited enumerable properties of source
             * objects into the destination object, skipping source properties that resolve
             * to `undefined` and throwing if source object keys are not found on target.
@@ -269,20 +274,24 @@ declare namespace EasyImmutable {
         /**
             * Returns a new ImmutableArray containing the values of the object's keys
             *
-            * NOTE: If using TypeScript, and no type argument is explicitly passed to
-            * the toArray generic, this method will essentially rerturn a tuple, which
-            * is strictly typed to allow only the values found in your array. For a less
-            * strictly typed array, pass a type argument, e.g. toArray<string | number>()
+            * NOTE: If using TypeScript, and your object has been explicitly typed, e.g.
+            * Immutable<{ a: 1, b: 2 }>({a: 1, b: 2}), and no type argument is explicitly
+            * passed to the `toArray` generic, this method will essentially rerturn a tuple,
+            * which is strictly typed to allow only the values found in your object. For a
+            * less strictly typed array, pass a type argument, e.g. toArray<number>(), this
+            * way you will be able to add additional data with the type number to your array.
             * @return Returns new ImmutableArray
             */
         toArray<K extends keyof T>(): ImmutableArray<T[K]>;
         /**
             * Returns a new ImmutableArray containing the values of the object's keys
             *
-            * NOTE: If using TypeScript, and no type argument is explicitly passed to
-            * the toArray generic, this method will essentially rerturn a tuple, which
-            * is strictly typed to allow only the values found in your array. For a less
-            * strictly typed array, pass a type argument, e.g. toArray<string | number>()
+            * NOTE: If using TypeScript, and your object has been explicitly typed, e.g.
+            * Immutable<{ a: 1, b: 2 }>({a: 1, b: 2}), and no type argument is explicitly
+            * passed to the `toArray` generic, this method will essentially rerturn a tuple,
+            * which is strictly typed to allow only the values found in your object. For a
+            * less strictly typed array, pass a type argument, e.g. toArray<number>(), this
+            * way you will be able to add additional data with the type number to your array.
             * @return Returns new ImmutableArray
             */
         toArray<TTypes>(): ImmutableArray<TTypes>;
@@ -394,25 +403,76 @@ declare namespace EasyImmutable {
         get<TValue>(path: PropertyName[], defaultValue: TValue): TValue;
         /**
             * Sets value at a given position or path, and returns a new ImmutableArray
+            *
+            * __Note:__ If the set operation changes the base type of your array, you
+            * can pass in a new type to the `set` genertic to keep your array type safe;
+            * e.g. `arr.set<TResult>(...): ImmutableArray<TResult>`
+            *
             * @param index The position of the element to set
             * @param value Value to set at the given position
             * @return Returns new ImmutableArray
             */
-        set(index: number, value: T): ImmutableArray<T>;
+        set<TValue>(index: number, value: TValue): ImmutableArray<T>;
         /**
             * Sets value at a given position or path, and returns a new ImmutableArray
-            * @param path The path of the element to set
+            *
+            * __Note:__ If the set operation changes the base type of your array, you
+            * can pass in a new type to the `set` genertic to keep your array type safe;
+            * e.g. `arr.set<TResult>(...): ImmutableArray<TResult>`
+            *
+            * @param index The position of the element to set
             * @param value Value to set at the given position
             * @return Returns new ImmutableArray
             */
-        set(path: string, value: T): ImmutableArray<T>;
+        set<TResult>(index: number, value: any): ImmutableArray<TResult>;
         /**
             * Sets value at a given position or path, and returns a new ImmutableArray
-            * @param path The path of the element to set
+            *
+            * __Note:__ If the set operation changes the base type of your array, you
+            * can pass in a new type to the `set` genertic to keep your array type safe;
+            * e.g. `arr.set<TResult>(...): ImmutableArray<TResult>`
+            *
+            * @param index The position of the element to set
             * @param value Value to set at the given position
             * @return Returns new ImmutableArray
             */
-        set(path: PropertyName[], value: T): ImmutableArray<T>;
+        set<TValue>(path: string, value: TValue): ImmutableArray<T>;
+        /**
+            * Sets value at a given position or path, and returns a new ImmutableArray
+            *
+            * __Note:__ If the set operation changes the base type of your array, you
+            * can pass in a new type to the `set` genertic to keep your array type safe;
+            * e.g. `arr.set<TResult>(...): ImmutableArray<TResult>`
+            *
+            * @param index The position of the element to set
+            * @param value Value to set at the given position
+            * @return Returns new ImmutableArray
+            */
+        set<TResult>(path: string, value: any): ImmutableArray<TResult>;
+        /**
+            * Sets value at a given position or path, and returns a new ImmutableArray
+            *
+            * __Note:__ If the set operation changes the base type of your array, you
+            * can pass in a new type to the `set` genertic to keep your array type safe;
+            * e.g. `arr.set<TResult>(...): ImmutableArray<TResult>`
+            *
+            * @param index The position of the element to set
+            * @param value Value to set at the given position
+            * @return Returns new ImmutableArray
+            */
+        set<TValue>(path: PropertyName[], value: TValue): ImmutableArray<T>;
+        /**
+            * Sets value at a given position or path, and returns a new ImmutableArray
+            *
+            * __Note:__ If the set operation changes the base type of your array, you
+            * can pass in a new type to the `set` genertic to keep your array type safe;
+            * e.g. `arr.set<TResult>(...): ImmutableArray<TResult>`
+            *
+            * @param index The position of the element to set
+            * @param value Value to set at the given position
+            * @return Returns new ImmutableArray
+            */
+        set<TResult>(path: PropertyName[], value: any): ImmutableArray<TResult>;
         /**
             * Like set except accepts an updater function to produce the value to set
             * @param index The position of the element to set
@@ -435,13 +495,19 @@ declare namespace EasyImmutable {
             */
         update(path: PropertyName[], updater: (value: T) => T): ImmutableArray<T>;
         /**
-            * Removes an element from the array and returns a new ImmutableArray Shorthand for Arraysplice(index, 1)
+            * Returns a new ImmutableArray with element at a given path or position removed
             * @param index The position of the element to delete
             * @return Returns new ImmutableArray
             */
         delete(index: number): ImmutableArray<T>;
         /**
-            * Removes all provided values from array using SameValueZero for equality comparisons.
+            * Returns a new ImmutableArray with element at a given path or position removed
+            * @param index The position of the element to delete
+            * @return Returns new ImmutableArray
+            */
+        delete(string: number): ImmutableArray<T>;
+        /**
+            * Removes all provided values from array using SameValueZero for equality comparisons
             * Uses Lodash's _.pull method
             * @param values The values to remove
             * @return Returns new ImmutableArray

@@ -1,6 +1,6 @@
 const  Immutable = require('../../index');
 
-describe("EasyImmutable 'set' method", function () {
+describe("EasyImmutable Object 'set' method", function () {
 
     it("immutably sets top level w/ prop name string", function () {
         const OG = Immutable({ a: 1, b: 2 });
