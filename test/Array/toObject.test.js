@@ -4,8 +4,11 @@ describe("EasyImmutable Array 'toObject' method", function () {
 
     it("correctly handles undefined argument", function () {
         const OG = Immutable(['a', 'b', 'c']);
-        const object = OG.toObject();
-        expect(object).toEqual({ a: 'a', b: 'b', c: 'c' });
+        const OG2 = Immutable([1, 2, 3]);
+        const obj1 = OG.toObject();
+        const obj2 = OG2.toObject();
+        expect(obj1).toEqual({ a: 'a', b: 'b', c: 'c' });
+        expect(obj2).toEqual({ 1: 1, 2: 2, 3: 3 });
     });
 
     it("throws when repeat keys detected from undefined argument", function () {
@@ -21,9 +24,9 @@ describe("EasyImmutable Array 'toObject' method", function () {
     });
 
     it("correctly handles function argument", function () {
-        const OG = Immutable(['a', 'b', 'c']);
-        const object = OG.toObject((l) => l.toUpperCase());
-        expect(object).toEqual({ A: 'a', B: 'b', C: 'c' });
+        const OG = Immutable([[1, 2], [3, 4], [5, 6], [7, 8]]);
+        const object = OG.toObject((arr) => arr[0] + arr[1]);
+        expect(object).toEqual({ 3: [1, 2], 7: [3, 4], 11: [5, 6], 15: [7, 8] });
     });
 
     it("correctly handles char argument", function () {

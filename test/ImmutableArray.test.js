@@ -76,6 +76,7 @@ describe("EasyImmutable Array", function () {
                 'update',
                 'delete',
                 'pull',
+                'flatten',
                 'equals',
                 'toObject',
                 'asMutable',

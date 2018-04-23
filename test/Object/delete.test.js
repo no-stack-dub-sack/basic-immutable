@@ -26,7 +26,7 @@ describe("EasyImmutable Object, 'delete' method", function () {
     });
 
     it("throws when provided invalid path", function () {
-        const OG = Immutable({ a: 1, b: 2  c: [1, 2, 3] });
+        const OG = Immutable({ a: 1, b: 2,  c: [1, 2, 3] });
         const throwsA = () => OG.delete('4.3.x.d');
         expect(throwsA).toThrow();
     });

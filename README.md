@@ -20,7 +20,7 @@ However, that this library is so tailored to my needs, means that it might not b
 
 # API
 
-__An important note about `BasicImmutable` arrays:__ 
+__An important note about `BasicImmutable` arrays:__
 - Arrays created with `Immutable()` are still just JavaScript arrays under the hood, which means that all of the native array methods are still available to you, and all non-mutator methods behave as normal (`filter`, `map`, `reduce`, `includes`, `indexOf`, etc.). However, all [mutator methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/prototype#Mutator_methods) have been re-implemented as immutable.
 - For example, `Immutable([1, 2, 3]).push(1)`, rather than returning the array's length after performing the push operation, will instead return a new `BasicImmutable` array (the original array is, of course, unmutated).
 
@@ -38,9 +38,39 @@ A full list of the re-implemented non-mutator methods is below, __which all retu
 | copyWithin | Returns a new `BasicImmutable` array with a sequence of array elements copied within the array     |
 | fill       | Returns a new `BasicImmutable` array filled from a start index to an end index with a static value |
 
-The remainder of the documentation follows the convention: __methodName [available on]__, e.g. `get` is available and can be called on both ImmutableObjects and ImmutableArrays.
+__An important note about working with `BasicImmutable` and TypeScript:__ All methods that return a new, modified object or array will accept type arguments via the generic versions of their typings, so that a new type can be assigned should the given operation change the shape of your object or array.
 
-## get &nbsp; _[object, array]_
+For example:
+
+```ts
+const obj = Immutable<{ a: number, b: number }>({ a: 6, b: 2 })
+
+const obj1 = obj.delete('a'); // inferred type of obj1 is still ImmutableObject<{ a: number; b: number; }>
+```
+This is incorrect. To ensure the object maintains type safety and accuracy, use the generic form of the method:
+```ts
+const obj2 = obj.delete<{ b: number; }>('a'); // type is now ImmutableObject<{ b: number; }>, which is correct
+```
+
+This might also be useful for converting an array's type, when popping, pushing, or otherwise modifying the returned array.
+```ts
+const users = Immutable<string[]>([['Pete', 'online'], ['Jared', 'offline']]);
+
+// create new array and assign tuple-like type of ImmutableArray<'Jared' | 'online>
+
+const jared = users.set([1, 1], 'online').shift<'Jared' | 'online'>().flatten(); // ['Jared','online']
+```
+This approach will work for all modifying methods: `set`, `update`, `delete`, `merge` (ImmutableObject only), `mergeTollerant` (ImmutableObject only), `pull` (ImmutableArray only), `fill` (ImmutableArray only), etc.
+
+Of course, if your object or array is less strictly typed to begin with, this could be a non-issue, so there is a balancing act between type-safety and what works best for you and your particular use-case:
+```ts
+const obj = Immutable<{ [key: string]: number }>({ a: 6, b: 2 })
+
+// OK! but not super type-safe
+const obj1 = obj.delete('a'); // inferred type of obj1 is still ImmutableObject<{ [key: string]: number; }>
+```
+
+## get <span style="font-size: 16px; font-style: italic;">&nbsp;&nbsp;Available on [ Immutableobject | ImmutableArray ]</span>
 
 Gets the value at a given path, and returns it. _Uses Lodash's `_.get()`._
 
@@ -59,11 +89,13 @@ arr.get('2.a'); // 1
 ```
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/GetExample)
 
-## set &nbsp; _[object, array]_
+## set <span style="font-size: 16px; font-style: italic;">&nbsp;&nbsp;Available on [ Immutableobject | ImmutableArray ]</span>
 Sets value at a given path, and returns a new BasicImmutable object or array. _Uses Lodash's `_.set()`._
 
 __Parameters:__
+
 `path` Number, path string, or path array
+
 `value` The value to set at the resolved path
 
 ```js
@@ -78,11 +110,13 @@ const arr2 = arr1.set('2.a', 10);
 ```
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/SetExample)
 
-## update <span style="font-size: 16px; font-style: italic;x">&nbsp;&nbsp;Available on [ Immutableobject | ImmutableArray ]</span>
+## update <span style="font-size: 16px; font-style: italic;">&nbsp;&nbsp;Available on [ Immutableobject | ImmutableArray ]</span>
 Like `set` except accepts an updater function to produce the value to set. _Uses Lodash's `_.update()`._
 
 __Parameters:__
+
 `path` Number, path string, or path array
+
 `updater` The function to produce the updated value
 
 ```js
@@ -96,10 +130,11 @@ const arr2 = arr.update('2.a', (n) => n + 10);
 ```
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/UpdateExample)
 
-## equals [object, array]
+## equals <span style="font-size: 16px; font-style: italic;">&nbsp;&nbsp;Available on [ Immutableobject | ImmutableArray ]</span>
 Performs a deep comparison (excluding the basic-immutable methods) between the object and array and the given argument. _Uses Lodash's `_.equals()`._
 
 __Parameters:__
+
 `comparison` Any (but an object or array makes the most sense).
 
 ```js
@@ -111,7 +146,7 @@ obj.equals([1, 2, 3]); // false
 ```
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/EqualsExample)
 
-## asMutable [object, array]
+## asMutable <span style="font-size: 16px; font-style: italic;">&nbsp;&nbsp;Available on [ Immutableobject | ImmutableArray ]</span>
 Converts to mutable object or array, i.e. basic-immutable methods are still available, but mutations are allowed until another basic-immutable method is called (unless that method is `toJS`).
 
 __NOTE:__ For array's, methods that are traditionally mutator methods will still be performed immutably, and if called, will return the array to it's immutable state.
@@ -132,7 +167,7 @@ obj1.a = 2; // { a: 2, b: 2 }
 ```
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/AsMutableExample)
 
-## toJS [object, array]
+## toJS <span style="font-size: 16px; font-style: italic;">&nbsp;&nbsp;Available on [ Immutableobject | ImmutableArray ]</span>
 Converts BasicImmutable object or array to plain-old JavaScript and returns it.
 
 Useful for working with front-end libraries that don't play well with instance objects (such as AngularJS, which I had difficulties with in particular when trying to use other plain-old JS immutability libraries).
@@ -153,12 +188,13 @@ const isDefinitelyJustJS = !props.includes('asMutable'); // true
 ```
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/ToJSExample)
 
-## merge [object]
+## merge <span style="font-size: 16px; font-style: italic;">&nbsp;&nbsp;Available on [ Immutableobject ]</span>
 Merges source object(s) into target object and returns updated target as a new BasicImmutable object. Will throw if any of the source objects contain keys uncommon to the target object. This is valuable to prevent accidentally merging the wrong source. __TIP:__ Use TypeScript to catch this error before runtime! _Uses Lodash's `_.merge()`._
 
 Use `mergeTollerant` for a less strict merge.
 
 __Parameters:__
+
 `source` or `…sources` One or more source objects.
 
 With TypeScript:
@@ -188,12 +224,13 @@ obj.merge({ a: 3 }, { d: 'nope!' }); // throws! key 'd' is not found on source o
 ```
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/MergeExample)
 
-## mergeTollerant [object]
+## mergeTollerant <span style="font-size: 16px; font-style: italic;">&nbsp;&nbsp;Available on [ Immutableobject ]</span>
 Merges source object(s) into target object and returns updated target as BasicImmutable object. Unlike `merge`, this method allows objects of different shapes to be merged. _Uses Lodash's \_.merge()_.
 
-__TIP:__ If using TypeScript, have no fear, this will still be a type-safe operation. The typings instruct TypeScript to create a new intersection type from the type of your original object and the type of the source object or objects. Be explicit to avoid loose type inference by passing your new type(s) to the `mergeTollerant` generic (see example below).
+__Typescript Tip:__ If using TypeScript, have no fear, this will still be a type-safe operation. The typings instruct TypeScript to create a new intersection type from the type of your original object and the type of the source object or objects. Be explicit to avoid loose type inference by passing your new type(s) to the `mergeTollerant` generic (see example below).
 
 __Parameters:__
+
 `source` or `…sources` One or more source objects.
 
 With TypeScript:
@@ -216,10 +253,10 @@ const obj1 = obj.merge({ c: 3 });
 ```
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/MergeTollerantExample)
 
-## toArray [object]
+## toArray <span style="font-size: 16px; font-style: italic;">&nbsp;&nbsp;Available on [ Immutableobject ]</span>
 Returns a new BasicImmutable array containing the values of the object's keys.
 
-__TIP:__ If using TypeScript, and your object has been explicitly typed, e.g. `Immutable<{ a: 1, b: 2 }>({a: 1, b: 2});`, and no type argument is explicitly passed to the `toArray` generic, this method will essentially rerturn a tuple, which is strictly typed to allow only the values found in your object. For a less strictly typed array, pass a type argument, e.g. `toArray<number>();`, this way you will be able to add additional data with the type `number` to your array.
+__TypeScript Tip:__ If using TypeScript, and your object has been explicitly typed, e.g. `Immutable<{ a: 1, b: 2 }>({a: 1, b: 2});`, and no type argument is explicitly passed to the `toArray` generic, this method will rerturn a tuple-like array, which is strictly typed to allow only the values found in your object. For a less strictly typed array, pass a type argument, e.g. `toArray<number>();`, this way you will be able to add additional data with the type `number` to your array.
 
 __Parameters:__ None
 
@@ -228,11 +265,19 @@ With TypeScript:
 const obj = Immutable({ a: 1, b: 2 })
 const obj1 = Immutable<{ a: 1, b: 2 }>({a: 1, b: 2})
 
-const arr = obj1.toArray()
-// inferred type: ImmutableArray<1, 2>, i.e. [1, 2]
+const arr = obj1.toArray();
+// inferred type: ImmutableArray<1, 2>
 
-const arr1 = obj1.toArray<number>()
+// will allow additional 1s and 2s to be added
+arr.push(1, 1, 2, 2); // OK!
+
+// but attempting to add other values will cause an error
+arr.push(3); // Error!
+// [ts] Argument of type '3' is not assignable to parameter of type '1 | 2'.
+
+const arr1 = obj1.toArray<number>();
 // type: ImmutableArray<number>, i.e. number[]
+arr1.push(3, 4, 5); // OK!
 
 const arr2 = obj.toArray() // inferred type: number[]
 // because obj1's type was inferred, not explicitly defined
@@ -245,10 +290,164 @@ const arr = obj.toArray(); // [1, 2, 3]
 ```
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/ToArrayExample)
 
-## delete 
-Returns a new `ImmutableArray` with an element the element at a given position removed; shorthand for `Array.splice(index, 1)`.
+## delete <span style="font-size: 16px; font-style: italic;">&nbsp;&nbsp;Available on [ Immutableobject | ImmutableArray ]</span>
+Returns a new `ImmutableObject` or `ImmutableArray` with element element at a given path or position removed.
 
-(!!!! UPDATE DELETE TYPINGS!!!)
+__TypeScript Tip:__ To maintain type-safety, be careful to re-type your object with the `delete` generic if the deletion causes a conflict with the base type originally defined or inferred for you object. See the note [here](#PLACEHOLDER) about working with BasicImmutable and TypeScript.
 
-## pull
-## toObject
+__Parameters:__
+
+`path` Number, path string, or path array
+
+With TypeScript:
+```ts
+interface IObj { a: number; b: number; c: (number | object)[]; }
+const obj = Immutable<IObj>({ a: 1, b: 2, c: [ 1, 2, { x: 1, y: 2 }]})
+
+// delte nested elements
+const obj1 = obj.delete('c[2].x');
+
+// re-assign type
+const obj2 = obj1.delete<{ a: number; b: number; }>('c'); // { a: 1, b: 2 }
+
+const arr = Immutable<number | number[]>([1, 2, [3, 4, 5]]);
+const arr1 = arr.delete([2, 1]) // [1, 2, [3, 5]]
+const arr2 = arr1.delete<number>(2) // type ImmutableArray<number>, [1, 2]
+```
+With JavaScript:
+```js
+const obj = Immutable({ a: 1, b: [ 1, 2, { x: 1, y: 2 }]})
+const arr = Immutable([1, 2, [3, 4, 5]]);
+
+// delte nested elements
+const obj1 = obj.delete('b[2].x'); // { a: 1, b: [ 1, 2, { y: 2 }]}
+const arr1 = arr.delete([2, 1]); // [1, 2, [3, 5]]
+```
+
+> :point_up: [Run](https://repl.it/@no_stack_dub_sack/ToArrayExample) NEEDS EXAMPLE
+
+## pull <span style="font-size: 16px; font-style: italic;">&nbsp;&nbsp;Available on [ ImmutableArray ]</span>
+Removes all provided values from an `ImmutableArray` using SameValueZero for equality comparisons. _Uses Lodash's \_.pull()_.
+
+__Parameters:__
+
+`pullDeep` Indicates whether or not to pull value(s) only from the top level array, or to pull value(s) recursively.
+
+With TypeScript:
+```ts
+const arr = Immutable([1, 2, 3, '4', '5']);
+// inferred type ImmutableArray<number | string>, i.e. (number | string)[]
+
+// pass type argument to re-type the ImmutableArray
+const arr1 = arr.pull<number>(false, '4', '5'); // [1, 2, 3]
+// now ImmutableArray<number>, i.e. number[]
+```
+With JavaScript:
+```js
+const arr = Immutable([1, 3, 3, 4, [1, 3, 3, 4, [1, 3]], 1, 3]);
+
+const arr1 = arr.pull(false, 3); // [ 1, 4, [ 1, 3, 3, 4, [ 1, 3 ] ], 1 ]
+
+const arr2 = arr1.pull(true, 3, 4); // [ 1, [ 1, [ 1 ] ], 1 ]
+```
+:point_up: [Run](https://repl.it/@no_stack_dub_sack/PullExample)
+
+## flatten <span style="font-size: 16px; font-style: italic;">&nbsp;&nbsp;Available on [ ImmutableArray ]</span>
+Flattens `ImmutableArray` either a single level deep or reccursively depending on provided parameter. _Uses Lodash's \_.flatten()_.
+
+__Parameters:__
+
+`deep` **_[optional]_** boolean, indicates whether or not to flatten recursively.
+
+With TypeScript:
+```ts
+const arr = Immutable([0, 0, [1, 1], [2, 2, [3, 3]]]);
+// inferred type ImmutableArray<number | (number | number[])[]>
+
+const flat = arr.flatten(); // [0, 0, 1, 1, 2, 2, [3, 3]]
+
+// pass type argument to re-type the ImmutableArray
+const flatter = arr.flatten<number>(true);
+// now ImmutableArray<number>, i.e. number[]
+```
+With JavaScript:
+```js
+const arr = Immutable([0, 0, [1, 1], [2, 2, [3, 3]]]);
+
+const flat = arr.flatten(); // [0, 0, 1, 1, 2, 2, [3, 3]]
+
+const flatter = arr.flatten(true); // [0, 0, 1, 1, 2, 2, 3, 3]
+```
+:point_up: [Run](https://repl.it/@no_stack_dub_sack/FlattenExample)
+
+## toObject <span style="font-size: 16px; font-style: italic;">&nbsp;&nbsp;Available on [ ImmutableArray ]</span>
+Maps over array and converts to `ImmutableObject`. Keys-value pairs are produced by the elements in the array (values) and by providing a key-initializer argument as described below (keys).
+
+__Parameters:__
+
+`keyInitializer` **_[optional]_** A single-letter string, equivalent to `/[a-zA-Z]/`, number, or function synonymous with an `Array.map` callback.
+- If provided a letter or number, keys will begin with that letter or number and be incremented for each element of the array.
+- To designate custom keys, proivde an `Array.map` callback instead (see example below).
+- If undefined, keys will be equal to their values (numbers) or the stringified version of their values. Both `number` and `string` key indexers will be allowed.
+
+With TypeScript:
+```ts
+const arr = Immutable(['a', 'b', 'c', 'd']);
+const nested = Immutable([[1, 2], [3, 4], [5, 6], [7, 8]]);
+
+/******** with no `keyInitializer` argument: ***********/
+const obj1 = arr.toObject<{ [key: string]: string; }>();
+// { a: 'a', b: 'b', c: 'c', d: 'd' }
+// pass type argument to indicate correct key indexer, default is { [key: number]: T; [key: string]: T; }
+
+
+/******** with string `keyInitializer` argument: ***********/
+const obj2 = nested.toObject<{ [key: string]: number[]; }>('A');
+// { A: [1, 2], B: [3, 4], C: [5, 6], D: [7, 8] }
+
+// same as above with more strict typing
+interface ObjFromArray { A: number[]; B: number[]; C: number[]; D: number[]; };
+const obj2 = nested.toObject<ObjFromArray>('A');
+// { A: [1, 2], B: [3, 4], C: [5, 6], D: [7, 8] }
+
+
+/******** with number `keyInitializer` argument: ***********/
+const obj4 = nested.toObject<{ [key: number]: number[]; }>(1);
+// { 1: [1, 2], 2: [3, 4], 3: [5, 6], 4: [7, 8] }
+
+
+/******** with Array.map `keyInitializer` argument: ***********/
+const obj5 = nested.toObject<{ [key: number]: number[]; }>((arr) => arr[0] + arr[1]);
+// { 3: [1, 2], 7: [3, 4], 11: [5, 6], 15: [7, 8] }
+
+const obj6 = arr.toObject<{ [key: string]: string; }>((el) => el.toUpperCase());
+// { A: 'a', B: 'b', C: 'c', D: 'd' }
+```
+With JavaScript:
+```js
+const arr = Immutable(['a', 'b', 'c', 'd']);
+const nested = Immutable([[1, 2], [3, 4], [5, 6], [7, 8]]);
+
+/******** with no `keyInitializer` argument: ***********/
+const obj1 = arr.toObject();
+// { a: 'a', b: 'b', c: 'c', d: 'd' }
+
+
+/******** with string `keyInitializer` argument: ***********/
+const obj2 = nested.toObject('A');
+// { A: [1, 2], B: [3, 4], C: [5, 6], D: [7, 8] }
+
+
+/******** with number `keyInitializer` argument: ***********/
+const obj3 = nested.toObject(1);
+// { 1: [1, 2], 2: [3, 4], 3: [5, 6], 4: [7, 8] }
+
+
+/******** with Array.map `keyInitializer` argument: ***********/
+const obj4 = nested.toObject((arr) => arr[0] + arr[1]);
+// { 3: [1, 2], 7: [3, 4], 11: [5, 6], 15: [7, 8] }
+
+const obj5 = arr.toObject((el) => el.toUpperCase());
+// { A: 'a', B: 'b', C: 'c', D: 'd' }
+```
+:point_up: [Run](https://repl.it/@no_stack_dub_sack/ToObjectExample)
