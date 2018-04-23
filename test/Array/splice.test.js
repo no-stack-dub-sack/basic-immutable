@@ -1,6 +1,6 @@
 const Immutable = require('../../index');
 
-describe("EasyImmutable Array, 'splice' method", function () {
+describe("BasicImmutable Array, 'splice' method", function () {
 
     it("returns new spliced array", function () {
         const OG = Immutable(['Jan', 'March', 'April', 'June']);

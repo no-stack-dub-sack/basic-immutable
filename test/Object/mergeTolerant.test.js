@@ -1,6 +1,6 @@
 const  Immutable = require('../../index');
 
-describe("EasyImmutable Object 'mergeTolerant' method", function () {
+describe("BasicImmutable Object 'mergeTolerant' method", function () {
 
     it("immutably merges", function () {
         const OG = Immutable({ a: 1, b: 2 });

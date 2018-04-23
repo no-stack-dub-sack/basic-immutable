@@ -1,6 +1,6 @@
 const Immutable = require('../../index');
 
-describe("EasyImmutable Array, 'copyWithin' method", function () {
+describe("BasicImmutable Array, 'copyWithin' method", function () {
 
     it("returns new array", function () {
         const OG = Immutable([1, 2, 3, 4, 5]);

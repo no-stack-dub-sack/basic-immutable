@@ -4,9 +4,6 @@ const ImmutableObject = require('./lib/ImmutableObject');
 
 /* TODO:
     * NEEDS MORE IN DEPTH TESTING OF toJS METHOD, CONVERTING DEEPLY NESTED OBJECTS WITH METHODS
-    * Finish declaration file
-    * Create docs
-    * publish to NPM to test out declaration files
     *
     * SEAMLESS-IMMUTABLE PR! Needs default value type for this line:
     *   https://github.com/DefinitelyTyped/DefinitelyTyped/blob/

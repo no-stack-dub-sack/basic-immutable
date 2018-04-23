@@ -1,11 +1,20 @@
 {
-  "name": "easy-immutable",
+  "name": "basic-immutable",
   "version": "1.0.0",
-  "description": "easy immutable objects in js, with small api surface area",
+  "description": "basic immutable JavaScript objects and arrays, with a small API surface area",
   "main": "index.js",
   "author": "pweinberg",
   "license": "MIT",
   "private": false,
+  "keywords": [
+    "immutable",
+    "typescript",
+    "javascript",
+    "persistent",
+    "datastructure",
+    "collection",
+    "data"
+  ],
   "scripts": {
     "test": "jest"
   },

@@ -1,6 +1,6 @@
 const Immutable = require('../../index');
 
-describe("EasyImmutable Array, 'equals' method", function () {
+describe("BasicImmutable Array, 'equals' method", function () {
 
     it("returns true when deep equal", function () {
         const state = [1, 2, 3, {a: 1 }, { a: [1, 2], b: () => 2 }];

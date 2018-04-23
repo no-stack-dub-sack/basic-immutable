@@ -1,6 +1,6 @@
 const Immutable = require('../../index');
 
-describe("EasyImmutable Object, 'equals' method", function () {
+describe("BasicImmutable Object, 'equals' method", function () {
 
     it("returns true when deep equal", function () {
         const state = { a: 1, b: { a: [1, 2], b: () => 2 } };

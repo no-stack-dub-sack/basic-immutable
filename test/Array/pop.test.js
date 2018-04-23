@@ -1,6 +1,6 @@
 const Immutable = require('../../index');
 
-describe("EasyImmutable Array, 'pop' method", function () {
+describe("BasicImmutable Array, 'pop' method", function () {
 
     it("returns new array", function () {
         const OG = Immutable(['Jan', 'Feb', 'March']);

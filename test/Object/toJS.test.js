@@ -1,6 +1,6 @@
 const Immutable = require('../../index');
 
-describe("EasyImmutable Object 'toJS' method", function () {
+describe("BasicImmutable Object 'toJS' method", function () {
 
     it("has 'hidden' non-enumerable props before toJS()", function () {
         const OG = Immutable({ a: 1, b: 2 });

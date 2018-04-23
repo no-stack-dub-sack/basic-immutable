@@ -1,6 +1,6 @@
 const Immutable = require('../../index');
 
-describe("EasyImmutable Array, 'reverse' method", function () {
+describe("BasicImmutable Array, 'reverse' method", function () {
 
     it("returns new array", function () {
         const OG = Immutable(['Jan', 'Feb', 'March']);

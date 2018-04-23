@@ -1,6 +1,6 @@
 const Immutable = require('../../index');
 
-describe("EasyImmutable Array, 'delete' method", function () {
+describe("BasicImmutable Array, 'delete' method", function () {
 
     it("immutably deletes", function () {
         const OG = Immutable([1, 2, 3, 4, 4, 5]);

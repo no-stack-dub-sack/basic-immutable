@@ -1,6 +1,6 @@
 const Immutable = require('../../index');
 
-describe("EasyImmutable Array 'toObject' method", function () {
+describe("BasicImmutable Array 'toObject' method", function () {
 
     it("correctly handles undefined argument", function () {
         const OG = Immutable(['a', 'b', 'c']);

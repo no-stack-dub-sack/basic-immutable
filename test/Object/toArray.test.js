@@ -1,6 +1,6 @@
 const Immutable = require('../../index');
 
-describe("EasyImmutable Object 'toArray' method", function () {
+describe("BasicImmutable Object 'toArray' method", function () {
 
     it("returns immutable array", function () {
         const obj = { a: 1, b: 2, c: { a: 1, b: 2 }, d: [1, 2]};

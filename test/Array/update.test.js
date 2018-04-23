@@ -1,6 +1,6 @@
 const Immutable = require('../../index');
 
-describe("EasyImmutable Array, 'update' method", function () {
+describe("BasicImmutable Array, 'update' method", function () {
 
     it("immutably updates top level w/ index", function () {
         const OG = Immutable([1, 2, { a: 3, b: [1, 2]}]);

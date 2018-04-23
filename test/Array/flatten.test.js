@@ -1,6 +1,6 @@
 const Immutable = require('../../index');
 
-describe("EasyImmutable Array, 'flatten' method", function () {
+describe("BasicImmutable Array, 'flatten' method", function () {
 
     it("immutable flattens 1 level deep", function () {
         const OG = Immutable([1, 2, [1, 2, [3, 4]]]);
