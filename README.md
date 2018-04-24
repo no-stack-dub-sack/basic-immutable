@@ -76,7 +76,7 @@ for (let el of userStatus2) {
   console.log(el.name, el.active)
 }
 // prints:
-// 'Brittany' false
+// 'Brittany' true
 // 'Jitendra' true
 // 'Mikael' false
 // 'Maria' true
