@@ -82,8 +82,6 @@ for (let el of userStatus2) {
 // 'Maria' true
 ```
 
-Pass your data structure to `Immutable()` and call `toJS()` to transform them back into POJO (plain-old JavaScript objects). [Full list of methods](#available-methods) and examples below.
-
 # API
 
 ### Available Methods:
