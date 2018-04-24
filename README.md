@@ -1,5 +1,3 @@
-> __NOTE:__ The library is not yet published. This file is a work in progress, and the API is not fully docmented yet.
-
 # basic-immutable
 
 ### About
