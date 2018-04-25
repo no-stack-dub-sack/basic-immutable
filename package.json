@@ -1,6 +1,6 @@
 {
   "name": "basic-immutable",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "basic immutable JavaScript objects and arrays, with a small API surface area",
   "main": "index.js",
   "types": "index.d.ts",
