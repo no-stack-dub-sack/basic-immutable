@@ -154,7 +154,7 @@ declare namespace BasicImmutable {
          */
         get<TValue>(path: PropertyName[], defaultValue: TValue): TValue;
         /**
-          * Like set except accepts an updater function to produce the value to set
+          * Like `set` except accepts an updater function to produce the value to set
           *
           * __Note:__ Pass a type argument to the `update` generic to maintain
           * type-safety if the update operation changes the type of your object.
@@ -165,7 +165,7 @@ declare namespace BasicImmutable {
          */
         update<TValue>(path: string, updaterFunc: (value: TValue) => any): ImmutableObject<T>;
         /**
-          * Like set except accepts an updater function to produce the value to set
+          * Like `set` except accepts an updater function to produce the value to set
           *
           * __Note:__ Pass a type argument to the `update` generic to maintain
           * type-safety if the update operation changes the type of your object.
@@ -176,7 +176,7 @@ declare namespace BasicImmutable {
          */
         update<TResult>(path: string, updaterFunc: (value: any) => any): ImmutableObject<TResult>;
         /**
-          * Like set except accepts an updater function to produce the value to set
+          * Like `set` except accepts an updater function to produce the value to set
           *
           * __Note:__ Pass a type argument to the `update` generic to maintain
           * type-safety if the update operation changes the type of your object.
@@ -187,7 +187,7 @@ declare namespace BasicImmutable {
          */
         update<TValue>(path: PropertyName[], updaterFunc: (value: TValue) => any): ImmutableObject<T>;
         /**
-          * Like set except accepts an updater function to produce the value to set
+          * Like `set` except accepts an updater function to produce the value to set
           *
           * __Note:__ Pass a type argument to the `update` generic to maintain
           * type-safety if the update operation changes the type of your object.
@@ -261,46 +261,46 @@ declare namespace BasicImmutable {
           * Recursively merges own and inherited enumerable properties of source
           * objects into the destination object, skipping source properties that resolve
           * to `undefined` and throwing if source object keys are not found on target.
-          * Use mergeTollerant for greater flexibility.
+          * Use `mergeTolerant` for greater flexibility.
           * @param sources The source object(s)
           * @return Returns new `ImmutableObject`
          */
         merge(...sources: Partial<T>[]): ImmutableObject<T>;
         /**
-          * Like merge except accepts source objects that do not share common keys with target.
-          * Use merge for more strict merging.
+          * Like `merge` except accepts source objects that do not share common keys with target.
+          * Use `merge` for more strict merging.
           * @param sources The source object(s)
           * @return Returns new `ImmutableObject`
          */
-        mergeTollerant<TSource>(source: TSource): ImmutableObject<T & TSource>;
+        mergeTolerant<TSource>(source: TSource): ImmutableObject<T & TSource>;
         /**
-          * Like merge except accepts source objects that do not share common keys with target.
-          * Use merge for more strict merging.
+          * Like `merge` except accepts source objects that do not share common keys with target.
+          * Use `merge` for more strict merging.
           * @param sources The source object(s)
           * @return Returns new `ImmutableObject`
          */
-        mergeTollerant<TSource1, TSource2>(source1: TSource1, source2: TSource2): ImmutableObject<T & TSource1 & TSource2>;
+        mergeTolerant<TSource1, TSource2>(source1: TSource1, source2: TSource2): ImmutableObject<T & TSource1 & TSource2>;
         /**
-          * Like merge except accepts source objects that do not share common keys with target.
-          * Use merge for more strict merging.
+          * Like `merge` except accepts source objects that do not share common keys with target.
+          * Use `merge` for more strict merging.
           * @param sources The source object(s)
           * @return Returns new `ImmutableObject`
          */
-        mergeTollerant<TSource1, TSource2, TSource3>(source1: TSource1, source2: TSource2, source3: TSource3): ImmutableObject<T & TSource1 & TSource2 & TSource3>;
+        mergeTolerant<TSource1, TSource2, TSource3>(source1: TSource1, source2: TSource2, source3: TSource3): ImmutableObject<T & TSource1 & TSource2 & TSource3>;
         /**
-          * Like merge except accepts source objects that do not share common keys with target.
-          * Use merge for more strict merging.
+          * Like `merge` except accepts source objects that do not share common keys with target.
+          * Use `merge` for more strict merging.
           * @param sources The source object(s)
           * @return Returns new `ImmutableObject`
          */
-        mergeTollerant<TSource1, TSource2, TSource3, TSource4>(source1: TSource1, source2: TSource2, source3: TSource3, source4: TSource4): ImmutableObject<T & TSource1 & TSource2 & TSource3 & TSource4>;
+        mergeTolerant<TSource1, TSource2, TSource3, TSource4>(source1: TSource1, source2: TSource2, source3: TSource3, source4: TSource4): ImmutableObject<T & TSource1 & TSource2 & TSource3 & TSource4>;
         /**
-          * Like merge except accepts source objects that do not share common keys with target.
-          * Use merge for more strict merging.
+          * Like `merge` except accepts source objects that do not share common keys with target.
+          * Use `merge` for more strict merging.
           * @param sources The source object(s)
           * @return Returns new `ImmutableObject`
          */
-        mergeTollerant(...sources: any[]): ImmutableObject<T & any>;
+        mergeTolerant(...sources: any[]): ImmutableObject<T & any>;
         /**
           * Converts to mutable ImmutableObject, i.e. Immutable methods are still available,
           * but mutations are allowed until another `ImmutableObject` method is called
@@ -312,6 +312,12 @@ declare namespace BasicImmutable {
           * @return Returns object
          */
         toJS(): T;
+        /**
+          * Converts `ImmutableObject` to plain-old JavaScript
+          * @param frozen Whether or not the resulting object should be frozen
+          * @return Returns object
+         */
+        toJS(frozen: boolean): Readonly<T>;
         /**
           * Performs a deep comparison between this and the given argument
           * @param comparison The values to compare with this
@@ -574,7 +580,7 @@ declare namespace BasicImmutable {
          */
         set<TResult>(path: PropertyName[], value: any): ImmutableArray<TResult>;
         /**
-          * Like set except accepts an updater function to produce the value to set
+          * Like `set` except accepts an updater function to produce the value to set
           *
           * __Note:__ Pass a type argument to the `update` generic to maintain
           * type-safety if the update operation changes the type of your array.
@@ -585,7 +591,7 @@ declare namespace BasicImmutable {
          */
         update(index: number, updater: (value: T) => T): ImmutableArray<T>;
         /**
-          * Like set except accepts an updater function to produce the value to set
+          * Like `set` except accepts an updater function to produce the value to set
           *
           * __Note:__ Pass a type argument to the `update` generic to maintain
           * type-safety if the update operation changes the type of your array.
@@ -596,7 +602,7 @@ declare namespace BasicImmutable {
          */
         update<TResult>(index: number, updater: (value: T) => T): ImmutableArray<TResult>;
         /**
-          * Like set except accepts an updater function to produce the value to set
+          * Like `set` except accepts an updater function to produce the value to set
           *
           * __Note:__ Pass a type argument to the `update` generic to maintain
           * type-safety if the update operation changes the type of your array.
@@ -607,7 +613,7 @@ declare namespace BasicImmutable {
          */
         update(path: string, updater: (value: T) => T): ImmutableArray<T>;
         /**
-          * Like set except accepts an updater function to produce the value to set
+          * Like `set` except accepts an updater function to produce the value to set
           *
           * __Note:__ Pass a type argument to the `update` generic to maintain
           * type-safety if the update operation changes the type of your array.
@@ -618,7 +624,7 @@ declare namespace BasicImmutable {
          */
         update<TResult>(path: string, updater: (value: T) => T): ImmutableArray<TResult>;
         /**
-          * Like set except accepts an updater function to produce the value to set
+          * Like `set` except accepts an updater function to produce the value to set
           *
           * __Note:__ Pass a type argument to the `update` generic to maintain
           * type-safety if the update operation changes the type of your array.
@@ -629,7 +635,7 @@ declare namespace BasicImmutable {
          */
         update(path: PropertyName[], updater: (value: T) => T): ImmutableArray<T>;
         /**
-          * Like set except accepts an updater function to produce the value to set
+          * Like `set` except accepts an updater function to produce the value to set
           *
           * __Note:__ Pass a type argument to the `update` generic to maintain
           * type-safety if the update operation changes the type of your array.
@@ -907,6 +913,12 @@ declare namespace BasicImmutable {
           * @return Returns array
          */
         toJS(): T[];
+        /**
+          * Converts `ImmutableArray` to plain-old JavaScript
+          * @param frozen Whether or not the resulting array should be frozen
+          * @return Returns array
+         */
+        toJS(frozen: boolean): Readonly<T[]>;
     }
 
     type Many<T> = T | T[];

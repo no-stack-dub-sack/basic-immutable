@@ -163,14 +163,15 @@ __Parameters:__
 `path` Number, path string, or path array
 
 ```js
-const arr = Immutable(['a', 'b', { a: 1, b: 2}]);
-const obj = Immutable({ a: 1, b: [3, 9], c: ['s', 't', 'u'] });
+const arr = Immutable(['d', 'o', { a: 'o', b: 'r'}]);
+const obj = Immutable({ a: 1, b: ['h', 9], c: ['o', 't', 'u'] });
 
-obj.get('a.b[0]'); // 3
-obj.get(['a', 'c', '0']); // 's'
+console.log(obj.get('b[0]')); // h
+console.log(obj.get(['c', '0'])); // o
 
-arr.get(1); // 'b'
-arr.get('2.a'); // 1
+console.log(arr.get(0)); // d
+console.log(arr.get('2.a')); // o
+console.log(arr.get('2.b')); // r
 ```
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/GetExample)
 
@@ -185,12 +186,12 @@ __Parameters:__
 
 ```js
 const arr = Immutable(['a', 'b', { a: 1, b: 2}]);
-const obj = Immutable({ a: 1, b: [3, 9], c: ['s', 't', 'u'] });
+const obj = Immutable({ a: 1, b: [3, 9], c: [['js', 't']] });
 
-const obj1 = obj.set(['a', 'c', '0'], 'sweet!');
-const obj2 = obj1.set('a.b[0]', 9);
+const obj1 = obj.set(['c', '0', 1], 'tools');
+const obj2 = obj.set('b[0]', 'are').set('c', 'fun!');
 
-const arr1 = arr.set(0, (str) => 'A');
+const arr1 = arr.set(0, 'A');
 const arr2 = arr1.set('2.a', 10);
 ```
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/SetExample)
@@ -208,10 +209,10 @@ __Parameters:__
 const arr = Immutable(['a', 'b', { a: 1, b: 2}]);
 const obj = Immutable({ a: 1, b: [3, 9], c: ['s', 't', 'u'] });
 
-const obj1 = obj.update(['a', 'c', '2'], (str) =>  str + ' r cool!');
-const obj2 = obj.update('a.b[0]', (n) => n * 3);
+const obj1 = obj.update(['c', '2'], (str) =>  str + ' r cool!');
+const obj2 = obj1.update('b[0]', (n) => n * 300);
 const arr1 = arr.update(0, (str) => str.toUpperCase());
-const arr2 = arr.update('2.a', (n) => n + 10);
+const arr2 = arr1.update('2.a', (n) => n + 10);
 ```
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/UpdateExample)
 
@@ -283,31 +284,40 @@ arr1[0] = 'allowed';
 console.log(arr1.get(0)); // 'allowed'
 
 const arr2 = arr1.push(4);
-arr2[0] = 'not allowed'; // nope! push() was called, the resulting array is immutable
+arr2[0] = 'not allowed'; // nope!
+// push() was called, the resulting array is immutable
 
 const obj1 = obj.asMutable();
 obj1.a = 2; // { a: 2, b: 2 }
 ```
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/AsMutableExample)
 
-## toJS
-Converts `ImmutableObject` or `ImmutableArray` to plain-old JavaScript and returns it (can be mutated, basic-immutable API helper methods are stripped away).
+## toJS(frozen?)
+Converts `ImmutableObject` or `ImmutableArray` to plain-old JavaScript and returns it (can be mutated, basic-immutable API helper methods are stripped away. To return a plain, but frozen object, pass `true`).
 
 Useful for working with front-end libraries that don't play well with instance objects (such as AngularJS, which I had difficulties with in particular when trying to use other plain-old JS immutability libraries).
 
-__Parameters:__ None
+__Parameters:__
+
+`frozen` **_[optional]_** boolean, whether or not to return a frozen object or array.
 
 ```js
 const arr = Immutable([1, 2, 3]);
 const obj = Immutable({ a: 1, b: 2 });
 
 const jsArr = arr.toJS();
-const jsObj = arr.toJS();
+const jsObj = obj.toJS();
 
 let props = Object.getOwnPropertyNames(jsArr);
 props = props.concat(Object.getOwnPropertyNames(jsObj));
 
 const isDefinitelyJustJS = !props.includes('asMutable'); // true
+
+jsObj.a = 3; // can be mutated
+jsArr[3] = 4; // can be mutated
+
+const frozenJSObj = obj.toJS(true); // plain-jane JS, but cannot be mutated
+frozenJSObj.a = 3; // throws in strict mode
 ```
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/ToJSExample)
 
