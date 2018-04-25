@@ -92,7 +92,7 @@ for (let el of userStatus2) {
   - [delete](#deletepath)
   - [equals](#equals)
   - [asMutable](#asmutable)
-  - [toJS](#tojs)
+  - [toJS](#tojsfrozen)
 - ImmutableObject
   - [merge](#mergesources)
   - [mergeTolerant](#mergetolerantsources)
