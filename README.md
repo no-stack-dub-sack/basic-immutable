@@ -95,7 +95,7 @@ for (let el of userStatus2) {
   - [toJS](#tojs)
 - ImmutableObject
   - [merge](#mergesources)
-  - [mergeTollerant](#mergetollerantsources)
+  - [mergeTolerant](#mergetolerantsources)
   - [toArray](#toarray)
 - ImmutableArray
   - [pull](#pullpulldeep-values)
@@ -145,7 +145,7 @@ const users = Immutable<string[]>([['Pete', 'online'], ['Jared', 'offline']]);
 
 const jared = users.set([1, 1], 'online').shift<'Jared' | 'online'>().flatten(); // ['Jared','online']
 ```
-This approach will work for all modifying methods: `set`, `update`, `delete`, `merge` (ImmutableObject only), `mergeTollerant` (ImmutableObject only), `pull` (ImmutableArray only), `fill` (ImmutableArray only), etc.
+This approach will work for all modifying methods: `set`, `update`, `delete`, `merge` (ImmutableObject only), `mergeTolerant` (ImmutableObject only), `pull` (ImmutableArray only), `fill` (ImmutableArray only), etc.
 
 Of course, if your object or array is less strictly typed to begin with, this could be a non-issue, so there is a balancing act between type-safety and what works best for you and your particular use-case:
 ```ts
@@ -166,7 +166,7 @@ __Parameters:__
 const arr = Immutable(['a', 'b', { a: 1, b: 2}]);
 const obj = Immutable({ a: 1, b: [3, 9], c: ['s', 't', 'u'] });
 
-obj1.set('a.b[0]'); // 3
+obj.get('a.b[0]'); // 3
 obj.get(['a', 'c', '0']); // 's'
 
 arr.get(1); // 'b'
@@ -208,7 +208,7 @@ __Parameters:__
 const arr = Immutable(['a', 'b', { a: 1, b: 2}]);
 const obj = Immutable({ a: 1, b: [3, 9], c: ['s', 't', 'u'] });
 
-const obj1 = obj.update(['a', 'c', '0'], (str) =>  str + ' r cool!');
+const obj1 = obj.update(['a', 'c', '2'], (str) =>  str + ' r cool!');
 const obj2 = obj.update('a.b[0]', (n) => n * 3);
 const arr1 = arr.update(0, (str) => str.toUpperCase());
 const arr2 = arr.update('2.a', (n) => n + 10);
@@ -314,7 +314,7 @@ const isDefinitelyJustJS = !props.includes('asMutable'); // true
 ## merge(...sources)
 Merges source object(s) into target object and returns updated target as a new `ImmutableObject`. Will throw if any of the source objects contain keys uncommon to the target object. This is valuable to prevent accidentally merging the wrong source. __TIP:__ Use TypeScript to catch this error before runtime! _Uses Lodash's `_.merge()`._
 
-Use `mergeTollerant` for a less strict merge.
+Use `mergeTolerant` for a less strict merge.
 
 __Parameters:__
 
@@ -347,10 +347,10 @@ obj.merge({ a: 3 }, { d: 'nope!' }); // throws! key 'd' is not found on source o
 ```
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/MergeExample)
 
-## mergeTollerant(...sources)
+## mergeTolerant(...sources)
 Like `merge`, except this method allows source objects of different shapes (containing keys uncommon to the target object) to be merged. _Uses Lodash's `_.merge()`_.
 
-__Typescript Tip:__ If using TypeScript, have no fear, this will still be a type-safe operation. The typings instruct TypeScript to create a new intersection type from the type of your original object and the type of the source object or objects. Be explicit to avoid loose type inference by passing your new type(s) to the `mergeTollerant` generic (see example below).
+__Typescript Tip:__ If using TypeScript, have no fear, this will still be a type-safe operation. The typings instruct TypeScript to create a new intersection type from the type of your original object and the type of the source object or objects. Be explicit to avoid loose type inference by passing your new type(s) to the `mergeTolerant` generic (see example below).
 
 __Parameters:__
 
@@ -360,26 +360,26 @@ With TypeScript:
 ```ts
 const obj = Immutable<{ a: 'yes'; b: 'no' }>({ a: 'yes', b: 'no'});
 
-const good = obj.mergeTollerant({ c: 'maybe' });
+const good = obj.mergeTolerant({ c: 'maybe' });
 // is inferred type { a: "yes"; b: "no"; } & { c: string; }
 
 interface IMaybe { c: 'maybe'; }
-const better = obj.mergeTollerant<IMaybe>({ c: 'maybe' });
+const better = obj.mergeTolerant<IMaybe>({ c: 'maybe' });
 // is safer type { a: "yes"; b: "no"; } & { c: "maybe"; }
 ```
 With JavaScript:
 ```js
 const obj = Immutable({ a: 1, b: 2 });
 
-const obj1 = obj.merge({ c: 3 });
+const obj1 = obj.mergeTolerant({ c: 3 });
 // { a: 1, b: 2, c: 3 }
 ```
-:point_up: [Run](https://repl.it/@no_stack_dub_sack/MergeTollerantExample)
+:point_up: [Run](https://repl.it/@no_stack_dub_sack/MergeTolerantExample)
 
 ## toArray
 Returns a new `ImmutableArray` array containing the values of the object's keys.
 
-__TypeScript Tip:__ If using TypeScript, and your object has been explicitly typed, e.g. `Immutable<{ a: 1, b: 2 }>({a: 1, b: 2});`, and no type argument is explicitly passed to the `toArray` generic, this method will rerturn a tuple-like array, which is strictly typed to allow only the values found in your object. For a less strictly typed array, pass a type argument, e.g. `toArray<number>();`, this way you will be able to add additional data with the type `number` to your array.
+__TypeScript Tip:__ If using TypeScript, and your object has been explicitly typed, e.g. `Immutable<{ a: 1, b: 2 }>({a: 1, b: 2});`, and no type argument is explicitly passed to the `toArray` generic, this method will return a tuple-like array, which is strictly typed to allow only the values found in your object. For a less strictly typed array, pass a type argument, e.g. `toArray<number>();`, this way you will be able to add additional data with the type `number` to your array.
 
 __Parameters:__ None
 
@@ -440,7 +440,7 @@ const arr2 = arr1.pull(true, 3, 4); // [ 1, [ 1, [ 1 ] ], 1 ]
 :point_up: [Run](https://repl.it/@no_stack_dub_sack/PullExample)
 
 ## flatten(deep?)
-Flattens `ImmutableArray` either a single level deep or reccursively. _Uses Lodash's `_.flatten()`_.
+Flattens `ImmutableArray` either a single level deep or recursively. _Uses Lodash's `_.flatten()`_.
 
 __Parameters:__
 
@@ -474,7 +474,7 @@ __Parameters:__
 
 `keyInitializer` **_[optional]_** A single-letter string, equivalent to `/[a-zA-Z]/`, number, or function synonymous with an `Array.map` callback.
 - If provided a letter or number, keys will begin with that letter or number and be incremented for each element of the array.
-- To designate custom keys, proivde an `Array.map` callback instead (see example below).
+- To designate custom keys, provide an `Array.map` callback instead (see example below).
 - If undefined, keys will be equal to their values (numbers) or the stringified version of their values. Both `number` and `string` key indexers will be allowed.
 
 With TypeScript:
