@@ -1,7 +1,17 @@
 # basic-immutable
 
-### About
-An unsophisticated, single-dependency, [TypeScript friendly](#basicimmutable--typescript) immutability library for creating backwards JavaScript compatible objects and arrays, with a few extra features, just for fun. Under the hood, this library is really just an immutable extension of several [Lodash](https://github.com/lodash/lodash) methods; thrown together quickly and easily; nothing too fancy here :smile:
+An unsophisticated, single-dependency, [TypeScript friendly](#basicimmutable--typescript) immutability library for creating backwards JavaScript compatible objects and arrays, with a few extra features just for fun. Under the hood, this library is really just an immutable extension of several [Lodash](https://github.com/lodash/lodash) methods, thrown together quickly and easily; nothing too fancy here :smile:
+
+### Contents
+- [Background](#background)
+- [Getting Started](#getting-started)
+    - [Installation](#installation)
+    - [Basic examples](#basic-examples)
+- [API](#api)
+    - [An important note about `BasicImmutable` arrays](#an-important-note-about-basicimmutable-arrays)
+    - [BasicImmutable & TypeScript](#basicimmutable-typescript)
+    - [Available Methods](#available-methods)
+- [Contributing](#contributing)
 
 ### Background
 For the million or so immutability libraries out there, surprisingly, I was not able to find one that suited my needs perfectly. So I'm adding one more to the mix. Here's a brief summary of my favorite features of BasicImmutable, that I've found disparately across several libraries, but never together in one:
@@ -14,11 +24,11 @@ For the million or so immutability libraries out there, surprisingly, I was not 
 
 However, that this library is so tailored to my needs, means that it might not be right for you, or you may simply be happier with one of the alternatives. And there has not been any special attention paid to performance or speed - the library is as fast as Lodash is. Try it out if you'd like, otherwise, no big deal. My intent in publishing this, was just in case even one other person out there was facing the same struggles as I was, they might find this useful.
 
-# Getting Started
+## Getting Started
 
 ### Installation
 - To install, run `yarn add basic-immutable` or `npm install --save basic-immutable`
-- TypeScript typings are included and do not need to installed separately.
+- TypeScript typings are included and do not need to installed separately
 
 Pass your data structure to `Immutable()` and call `toJS()` to transform them back into POJO (plain-old JavaScript objects). [Full list of methods](#available-methods) and examples can be found in the [API section](#api) below.
 ### Basic examples
@@ -82,7 +92,7 @@ for (let el of userStatus2) {
 // 'Maria' true
 ```
 
-# API
+## API
 
 ### Available Methods:
 - ImmutableObject / ImmutableArray
@@ -103,7 +113,7 @@ for (let el of userStatus2) {
   - [toObject](#toobjectkeyinitializer)
   - [all methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#Methods) available on plain old JavaScript arrays**
 
-__**An important note about `BasicImmutable` arrays:__
+### **An important note about `BasicImmutable` arrays
 - Arrays created with `Immutable()` are still just JavaScript arrays under the hood, which means that all of the native array methods are still available to you, and all non-mutator methods behave as normal (`filter`, `map`, `reduce`, `includes`, `indexOf`, etc.). However, all [mutator methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/prototype#Mutator_methods) have been re-implemented as immutable.
 - For example, `Immutable([1, 2, 3]).push(1)`, rather than returning the array's length after performing the push operation, will instead return a new `BasicImmutable` array (the original array is, of course, unmutated).
 
@@ -173,7 +183,7 @@ console.log(arr.get(0)); // d
 console.log(arr.get('2.a')); // o
 console.log(arr.get('2.b')); // r
 ```
-:point_up: [Run](https://repl.it/@no_stack_dub_sack/GetExample)
+:point_up: [Run](https://repl.it/@no_stack_dub_sack/GetExample) &nbsp; :arrow_up: [Back to Methods List](#available-methods)
 
 ## set(path, value)
 Returns a new `ImmutableObject` or `ImmutableArray` with value set at the given path. _Uses Lodash's `_.set()`._
@@ -194,7 +204,7 @@ const obj2 = obj.set('b[0]', 'are').set('c', 'fun!');
 const arr1 = arr.set(0, 'A');
 const arr2 = arr1.set('2.a', 10);
 ```
-:point_up: [Run](https://repl.it/@no_stack_dub_sack/SetExample)
+:point_up: [Run](https://repl.it/@no_stack_dub_sack/SetExample) &nbsp; :arrow_up: [Back to Methods List](#available-methods)
 
 ## update(path, updater)
 Like `set` except accepts an updater function to produce the value to set. _Uses Lodash's `_.update()`._
@@ -214,7 +224,7 @@ const obj2 = obj1.update('b[0]', (n) => n * 300);
 const arr1 = arr.update(0, (str) => str.toUpperCase());
 const arr2 = arr1.update('2.a', (n) => n + 10);
 ```
-:point_up: [Run](https://repl.it/@no_stack_dub_sack/UpdateExample)
+:point_up: [Run](https://repl.it/@no_stack_dub_sack/UpdateExample) &nbsp; :arrow_up: [Back to Methods List](#available-methods)
 
 ## delete(path)
 Returns a new `ImmutableObject` or `ImmutableArray` with element at a given path or position removed.
@@ -250,7 +260,7 @@ const obj1 = obj.delete('b[2].x'); // { a: 1, b: [ 1, 2, { y: 2 }]}
 const arr1 = arr.delete([2, 1]); // [1, 2, [3, 5]]
 ```
 
-:point_up: [Run](https://repl.it/@no_stack_dub_sack/DeleteExample)
+:point_up: [Run](https://repl.it/@no_stack_dub_sack/DeleteExample) &nbsp; :arrow_up: [Back to Methods List](#available-methods)
 
 ## equals(comparison)
 Performs a deep comparison (excluding the basic-immutable methods) between the object and array and the given argument. _Uses Lodash's `_.equals()`._
@@ -266,7 +276,7 @@ const obj = Immutable({ a: 1, b: 2 });
 arr.equals([1, 2, 3]); // true
 obj.equals([1, 2, 3]); // false
 ```
-:point_up: [Run](https://repl.it/@no_stack_dub_sack/EqualsExample)
+:point_up: [Run](https://repl.it/@no_stack_dub_sack/EqualsExample) &nbsp; :arrow_up: [Back to Methods List](#available-methods)
 
 ## asMutable
 Converts to mutable object or array, i.e. basic-immutable methods are still available, but mutations are allowed until another basic-immutable modifying method is called (i.e. any method that returns a new `ImmutableObject` or `ImmutableArray`).
@@ -290,7 +300,7 @@ arr2[0] = 'not allowed'; // nope!
 const obj1 = obj.asMutable();
 obj1.a = 2; // { a: 2, b: 2 }
 ```
-:point_up: [Run](https://repl.it/@no_stack_dub_sack/AsMutableExample)
+:point_up: [Run](https://repl.it/@no_stack_dub_sack/AsMutableExample) &nbsp; :arrow_up: [Back to Methods List](#available-methods)
 
 ## toJS(frozen?)
 Converts `ImmutableObject` or `ImmutableArray` to plain-old JavaScript and returns it (can be mutated, basic-immutable API helper methods are stripped away. To return a plain, but frozen object, pass `true`).
@@ -319,7 +329,7 @@ jsArr[3] = 4; // can be mutated
 const frozenJSObj = obj.toJS(true); // plain-jane JS, but cannot be mutated
 frozenJSObj.a = 3; // throws in strict mode
 ```
-:point_up: [Run](https://repl.it/@no_stack_dub_sack/ToJSExample)
+:point_up: [Run](https://repl.it/@no_stack_dub_sack/ToJSExample) &nbsp; :arrow_up: [Back to Methods List](#available-methods)
 
 ## merge(...sources)
 Merges source object(s) into target object and returns updated target as a new `ImmutableObject`. Will throw if any of the source objects contain keys uncommon to the target object. This is valuable to prevent accidentally merging the wrong source. __TIP:__ Use TypeScript to catch this error before runtime! _Uses Lodash's `_.merge()`._
@@ -355,7 +365,7 @@ const obj2 = obj1.merge({ c: 5 }, { b: 4 });
 
 obj.merge({ a: 3 }, { d: 'nope!' }); // throws! key 'd' is not found on source object
 ```
-:point_up: [Run](https://repl.it/@no_stack_dub_sack/MergeExample)
+:point_up: [Run](https://repl.it/@no_stack_dub_sack/MergeExample) &nbsp; :arrow_up: [Back to Methods List](#available-methods)
 
 ## mergeTolerant(...sources)
 Like `merge`, except this method allows source objects of different shapes (containing keys uncommon to the target object) to be merged. _Uses Lodash's `_.merge()`_.
@@ -384,7 +394,7 @@ const obj = Immutable({ a: 1, b: 2 });
 const obj1 = obj.mergeTolerant({ c: 3 });
 // { a: 1, b: 2, c: 3 }
 ```
-:point_up: [Run](https://repl.it/@no_stack_dub_sack/MergeTolerantExample)
+:point_up: [Run](https://repl.it/@no_stack_dub_sack/MergeTolerantExample) &nbsp; :arrow_up: [Back to Methods List](#available-methods)
 
 ## toArray
 Returns a new `ImmutableArray` array containing the values of the object's keys.
@@ -421,7 +431,7 @@ const obj = Immutable({ a: 1, b: 2, c: 3 });
 
 const arr = obj.toArray(); // [1, 2, 3]
 ```
-:point_up: [Run](https://repl.it/@no_stack_dub_sack/ToArrayExample)
+:point_up: [Run](https://repl.it/@no_stack_dub_sack/ToArrayExample) &nbsp; :arrow_up: [Back to Methods List](#available-methods)
 
 ## pull(deep, ...values)
 Removes all provided values from an `ImmutableArray` using SameValueZero for equality comparisons, either from the top level array, or recursively. _Uses Lodash's `_.pull()`_.
@@ -447,7 +457,7 @@ const arr1 = arr.pull(false, 3); // [ 1, 4, [ 1, 3, 3, 4, [ 1, 3 ] ], 1 ]
 
 const arr2 = arr1.pull(true, 3, 4); // [ 1, [ 1, [ 1 ] ], 1 ]
 ```
-:point_up: [Run](https://repl.it/@no_stack_dub_sack/PullExample)
+:point_up: [Run](https://repl.it/@no_stack_dub_sack/PullExample) &nbsp; :arrow_up: [Back to Methods List](#available-methods)
 
 ## flatten(deep?)
 Flattens `ImmutableArray` either a single level deep or recursively. _Uses Lodash's `_.flatten()`_.
@@ -475,7 +485,7 @@ const flat = arr.flatten(); // [0, 0, 1, 1, 2, 2, [3, 3]]
 
 const flatter = arr.flatten(true); // [0, 0, 1, 1, 2, 2, 3, 3]
 ```
-:point_up: [Run](https://repl.it/@no_stack_dub_sack/FlattenExample)
+:point_up: [Run](https://repl.it/@no_stack_dub_sack/FlattenExample) &nbsp; :arrow_up: [Back to Methods List](#available-methods)
 
 ## toObject(keyInitializer?)
 Maps over array and converts to `ImmutableObject`. Keys-value pairs are produced by the elements in the array (values) and by providing a key-initializer argument as described below (keys).
@@ -547,7 +557,7 @@ const obj4 = nested.toObject((arr) => arr[0] + arr[1]);
 const obj5 = arr.toObject((el) => el.toUpperCase());
 // { A: 'a', B: 'b', C: 'c', D: 'd' }
 ```
-:point_up: [Run](https://repl.it/@no_stack_dub_sack/ToObjectExample)
+:point_up: [Run](https://repl.it/@no_stack_dub_sack/ToObjectExample) &nbsp; :arrow_up: [Back to Methods List](#available-methods)
 
-# Contributing
+## Contributing
 I slapped this together pretty quick, and it's not meant to be fancy or a miraculous feat of programming. That said, I'm sure there's still plenty of room for improvement. Contributing guidelines will be added soon, but for now, if there's any interest in contributing, please open an issue!
