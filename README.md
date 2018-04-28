@@ -9,7 +9,7 @@ An unsophisticated, single-dependency, [TypeScript friendly](#basicimmutable--ty
     - [Basic examples](#basic-examples)
 - [API](#api)
     - [An important note about `BasicImmutable` arrays](#an-important-note-about-basicimmutable-arrays)
-    - [BasicImmutable & TypeScript](#basicimmutable-typescript)
+    - [BasicImmutable & TypeScript](#basicimmutable--typescript)
     - [Available Methods](#available-methods)
 - [Contributing](#contributing)
 
